@@ -24,6 +24,15 @@ namespace wills_inventory.Controllers
             var results = db.Items;
             return results.ToList();
         }
+        [HttpGet("{Id}")]
+        public ActionResult<Item> Get(int Id)
+        {
+            var db = new DatabaseContext();
+            var results = db.Items.FirstOrDefault(w => w.Id == Id);
+
+            return results;
+        }
+
 
     }
 }
