@@ -2,7 +2,6 @@ namespace wills_inventory.Models
 {
     public class Location
     {
-        private string phoneNumber;
 
         public int Id { get; set; }
         public string Address { get; set; }

@@ -15,8 +15,15 @@ namespace wills_inventory.Controllers
         {
             this.db = new DatabaseContext();
         }
-        [HttpPut("location/{Id}")]
-        public ActionResult<Location> AddLoc(int Id, [FromBody]Location location)
+        [HttpPost]
+        public ActionResult<Location> Add([FromBody] Location addLoc)
+        {
+            db.Locations.Add(addLoc);
+            db.SaveChanges();
+            return addLoc;
+        }
+        [HttpPut("{Id}")]
+        public ActionResult<Location> UpdateLoc(int Id, [FromBody]Location location)
         {
             var results = db.Locations.FirstOrDefault(w => w.Id == Id);
             results.Address = location.Address;
