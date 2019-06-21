@@ -43,5 +43,6 @@ namespace wills_inventory
             modelBuilder.HasAnnotation("ProductVersion", "2.2.0-rtm-35687");
         }
         public DbSet<wills_inventory.Models.Item> Items { get; set; }
+        public DbSet<wills_inventory.Models.Location> Locations { get; set; }
     }
 }
