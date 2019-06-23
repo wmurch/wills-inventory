@@ -22,15 +22,11 @@ namespace wills_inventory.Controllers
             db.SaveChanges();
             return addLoc;
         }
-        [HttpPut("{Id}")]
-        public ActionResult<Location> UpdateLoc(int Id, [FromBody]Location location)
+        [HttpGet]
+        public ActionResult<List<Location>> Get()
         {
-            var results = db.Locations.FirstOrDefault(w => w.Id == Id);
-            results.Address = location.Address;
-            results.ManagerName = location.ManagerName;
-            results.PhoneNumber = location.PhoneNumber;
-            db.SaveChanges();
-            return results;
+            var results = db.Locations;
+            return results.ToList();
         }
 
     }
