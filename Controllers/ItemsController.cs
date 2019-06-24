@@ -18,23 +18,14 @@ namespace wills_inventory.Controllers
         {
             this.db = new DatabaseContext();
         }
-        /* [HttpPost]
+        [HttpPost]
         public ActionResult<Item> Post([FromBody]Item postItem)
         {
             var location = db.Locations.FirstOrDefault(l => l.Id == postItem.Id);
-            if (location == null)
-            {
-                location = new Location
-                {
-                    Id = postItem.LocationId
-                };
-                db.Locations.Add(location);
-                db.SaveChanges();
-            }
             db.Items.Add(postItem);
             db.SaveChanges();
             return postItem;
-        } */
+        }
         [HttpGet]
         public ActionResult<List<Item>> Get()
         {
@@ -66,20 +57,21 @@ namespace wills_inventory.Controllers
 
             return results;
         }
-        /* [HttpPut("{Id}")]
+        [HttpPut("{Id}")]
         public ActionResult<Item> Update(int Id, [FromBody]Item item)
         {
 
-            var results = db.Locations.Include(i => i.Items).FirstOrDefault(w => w.Id == Id);
+            var results = db.Items.Include(i => i.Location).FirstOrDefault(w => w.Id == Id);
             results.SKU = item.SKU;
             results.Name = item.Name;
             results.NumberInStock = item.NumberInStock;
             results.ShortDescription = item.ShortDescription;
             results.Price = item.Price;
             results.DateOrdered = item.DateOrdered;
+            results.LocationId = item.LocationId;
             db.SaveChanges();
             return results;
-        } */
+        }
         [HttpDelete("{Id}")]
         public ActionResult<Item> Delete(int Id)
         {
