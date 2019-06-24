@@ -73,10 +73,10 @@ namespace wills_inventory.Controllers
             return results;
         }
         [HttpDelete("{Id}")]
-        public ActionResult<Item> Delete(int Id)
+        public ActionResult<Item> Delete(int LocationID, int Id)
         {
 
-            var results = db.Items.FirstOrDefault(w => w.Id == Id);
+            var results = db.Items.Include(i => i.Location).FirstOrDefault(w => w.Id == Id);
             db.Items.Remove(results);
             db.SaveChanges();
             return Ok();
