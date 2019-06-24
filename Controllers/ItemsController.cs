@@ -3,8 +3,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using wills_inventory.Models;
-using wills_inventory.ViewModels;
-using wills_inventory.Controllers.LocationsController.cs
+
 
 
 namespace wills_inventory.Controllers
@@ -19,7 +18,7 @@ namespace wills_inventory.Controllers
         {
             this.db = new DatabaseContext();
         }
-        [HttpPost]
+        /* [HttpPost]
         public ActionResult<Item> Post([FromBody]Item postItem)
         {
             var location = db.Locations.FirstOrDefault(l => l.Id == postItem.Id);
@@ -35,13 +34,13 @@ namespace wills_inventory.Controllers
             db.Items.Add(postItem);
             db.SaveChanges();
             return postItem;
-        }
+        } */
         [HttpGet]
-        public ActionResult<List<ItemViewModel>> Get()
+        public ActionResult<List<Item>> Get()
         {
 
-            var results = db.Locations.Include(i => i.Items);
-            return results.Items;
+            var results = db.Items.Include(i => i.Location);
+            return results.ToList();
         }
         [HttpGet("id/{Id}")]
         public ActionResult<Item> Get(int Id)
