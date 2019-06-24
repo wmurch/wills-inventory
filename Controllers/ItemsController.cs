@@ -1,7 +1,11 @@
 using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using wills_inventory.Models;
+using wills_inventory.ViewModels;
+using wills_inventory.Controllers.LocationsController.cs
+
 
 namespace wills_inventory.Controllers
 {
@@ -18,22 +22,31 @@ namespace wills_inventory.Controllers
         [HttpPost]
         public ActionResult<Item> Post([FromBody]Item postItem)
         {
-            //var db = new DatabaseContext();
+            var location = db.Locations.FirstOrDefault(l => l.Id == postItem.Id);
+            if (location == null)
+            {
+                location = new Location
+                {
+                    Id = postItem.LocationId
+                };
+                db.Locations.Add(location);
+                db.SaveChanges();
+            }
             db.Items.Add(postItem);
             db.SaveChanges();
             return postItem;
         }
         [HttpGet]
-        public ActionResult<List<Item>> Get()
+        public ActionResult<List<ItemViewModel>> Get()
         {
-            // var db = new DatabaseContext();
-            var results = db.Items;
-            return results.ToList();
+
+            var results = db.Locations.Include(i => i.Items);
+            return results.Items;
         }
         [HttpGet("id/{Id}")]
         public ActionResult<Item> Get(int Id)
         {
-            //var db = new DatabaseContext();
+
             var results = db.Items.FirstOrDefault(w => w.Id == Id);
 
             return results;
@@ -41,7 +54,7 @@ namespace wills_inventory.Controllers
         [HttpGet("OutOfStock")]
         public ActionResult<List<Item>> GetOutOfStock()
         {
-            //var db = new DatabaseContext();
+
             var results = db.Items.Where(w => w.NumberInStock == 0);
 
             return results.ToList();
@@ -49,16 +62,16 @@ namespace wills_inventory.Controllers
         [HttpGet("SKU/{SKU}")]
         public ActionResult<Item> GetSKU(int SKU)
         {
-            //var db = new DatabaseContext();
+
             var results = db.Items.FirstOrDefault(w => w.SKU == SKU);
 
             return results;
         }
-        [HttpPut("{Id}")]
+        /* [HttpPut("{Id}")]
         public ActionResult<Item> Update(int Id, [FromBody]Item item)
         {
-            //var db = new DatabaseContext();
-            var results = db.Items.FirstOrDefault(w => w.Id == Id);
+
+            var results = db.Locations.Include(i => i.Items).FirstOrDefault(w => w.Id == Id);
             results.SKU = item.SKU;
             results.Name = item.Name;
             results.NumberInStock = item.NumberInStock;
@@ -67,11 +80,11 @@ namespace wills_inventory.Controllers
             results.DateOrdered = item.DateOrdered;
             db.SaveChanges();
             return results;
-        }
+        } */
         [HttpDelete("{Id}")]
         public ActionResult<Item> Delete(int Id)
         {
-            //var db = new DatabaseContext();
+
             var results = db.Items.FirstOrDefault(w => w.Id == Id);
             db.Items.Remove(results);
             db.SaveChanges();
